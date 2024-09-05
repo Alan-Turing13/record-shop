@@ -25,7 +25,7 @@ public class AlbumService implements AlbumServiceMethods{
     public Album getAlbumById(Long id) {
         Optional<Album> album = albumRepository.findById(id);
         if (album.isEmpty()){
-            System.err.println("No album found for getAlbumById");
+            System.err.println("No album found for getAlbumById with id " + id);
         }
         return album.orElse(new Album());
     }
@@ -33,7 +33,7 @@ public class AlbumService implements AlbumServiceMethods{
     public List<Album> getAlbumsByArtist(String artist) {
         Optional<List<Album>> albums = Optional.of(albumRepository.findAllByArtist(artist));
         if (albums.isEmpty()){
-            System.err.println("No albums found for getAlbumsByArtist");
+            System.err.println("No albums found for getAlbumsByArtist with artist " + artist);
         }
         return albums.orElse(List.of()) ;
     }
@@ -47,7 +47,11 @@ public class AlbumService implements AlbumServiceMethods{
     }
 
     public Album postAlbum(Album album) {
-        return null;
+        Optional<Album> savedAlbum = Optional.of(albumRepository.save(album));
+        if (savedAlbum.isEmpty()){
+            System.err.println("postAlbum failed for album " + album.getName());
+        }
+        return savedAlbum.orElse(new Album());
     }
 
     public List<Album> postMultipleAlbums(List<Album> albums) {

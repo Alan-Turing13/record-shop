@@ -5,10 +5,7 @@ import com.northcoders.record_shop.service.AlbumService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,6 +29,11 @@ public class Controller {
     @GetMapping("/artist")
     public ResponseEntity<List<Album>> getAlbumsByArtist(@RequestParam(value="name") String artistName){
         return new ResponseEntity<>(albumService.getAlbumsByArtist(artistName), HttpStatus.OK);
+    }
+
+    @PostMapping
+    public ResponseEntity<Album> postAlbum(@RequestBody Album newAlbum){
+        return new ResponseEntity<>(albumService.postAlbum(newAlbum), HttpStatus.CREATED);
     }
 
 }

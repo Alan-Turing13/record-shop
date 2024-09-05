@@ -1,8 +1,9 @@
-package com.northcoders.record_shop.service;
+package com.northcoders.record_shop.service.read;
 
 import com.northcoders.record_shop.model.Album;
 import com.northcoders.record_shop.model.Genre;
 import com.northcoders.record_shop.repository.AlbumRepository;
+import com.northcoders.record_shop.service.AlbumService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -15,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.mockito.Mockito.when;
 
 @DataJpaTest
-public class TestGetAlbumsByArtistService {
+public class TestGetAllService {
 
     @Mock
     private AlbumRepository mockAlbumRepository;
@@ -24,21 +25,19 @@ public class TestGetAlbumsByArtistService {
     private AlbumService albumService;
 
     @Test
-    @DisplayName("get all albums by artist")
-    void getAlbumsByArtistTest() throws Exception{
-        String artist = "Sergei Prokofiev";
-        String name = "Piano Concertos Nos. 2 & 3";
+    @DisplayName("get all albums")
+    void getAllAlbumsTest() throws Exception{
         List<Album> mockAlbums = List.of(new Album(
                 1L,
-                name,
-                1990,
-                Genre.NEOCLASSICAL,
-                artist
+                "Criss-Cross",
+                1963,
+                Genre.JAZZ,
+                "Thelonious Monk"
         ));
 
-        when(mockAlbumRepository.findAllByArtist(artist)).thenReturn(mockAlbums);
+        when(mockAlbumRepository.findAll()).thenReturn(mockAlbums);
 
-        List<Album> serviceResult = albumService.albumRepository.findAllByArtist(artist);
+        List<Album> serviceResult = albumService.getAllAlbums();
 
         assertIterableEquals(serviceResult, mockAlbums);
 

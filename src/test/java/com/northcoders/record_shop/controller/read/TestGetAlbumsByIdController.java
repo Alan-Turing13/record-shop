@@ -1,5 +1,6 @@
-package com.northcoders.record_shop.controller;
+package com.northcoders.record_shop.controller.read;
 
+import com.northcoders.record_shop.controller.Controller;
 import com.northcoders.record_shop.model.Album;
 import com.northcoders.record_shop.model.Genre;
 import com.northcoders.record_shop.service.AlbumService;

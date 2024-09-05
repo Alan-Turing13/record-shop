@@ -1,5 +1,7 @@
-package com.northcoders.record_shop.controller;
+package com.northcoders.record_shop.controller.read;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.northcoders.record_shop.controller.Controller;
 import com.northcoders.record_shop.model.Album;
 import com.northcoders.record_shop.model.Genre;
 import com.northcoders.record_shop.service.AlbumService;
@@ -23,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest
-public class TestGetAlbumsByArtistController {
+public class TestGetAllController {
 
     @Mock
     private AlbumService mockAlbumService;
@@ -40,26 +42,24 @@ public class TestGetAlbumsByArtistController {
     }
 
     @Test
-    @DisplayName("get albums by artist")
-    void getAlbumsByArtistTest() throws Exception{
-        String artist = "Sergei Prokofiev";
-        String name = "Piano Concertos Nos. 2 & 3";
+    @DisplayName("get all albums")
+    void getAllAlbumsTest() throws Exception{
         List<Album> mockAlbums = List.of(new Album(
                 1L,
-                name,
-                1990,
-                Genre.NEOCLASSICAL,
-                artist
+                "Criss-Cross",
+                1963,
+                Genre.JAZZ,
+                "Thelonious Monk"
         ));
 
-        when(mockAlbumService.getAlbumsByArtist(artist)).thenReturn(mockAlbums);
+        when(mockAlbumService.getAllAlbums()).thenReturn(mockAlbums);
         this.mockMvcController.perform(
-                MockMvcRequestBuilders.get("http://localhost:8080/api/v1/records/artist?name=".concat(artist))
+                MockMvcRequestBuilders.get("http://localhost:8080/api/v1/records/albums")
         )
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers
                         .jsonPath("$[0].name")
-                        .value(name)
+                        .value("Criss-Cross")
                 );
     }
 
