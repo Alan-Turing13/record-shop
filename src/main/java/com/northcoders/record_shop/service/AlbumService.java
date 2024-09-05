@@ -4,6 +4,7 @@ import com.northcoders.record_shop.model.Album;
 import com.northcoders.record_shop.repository.AlbumRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -15,11 +16,18 @@ public class AlbumService implements AlbumServiceMethods{
 
     public List<Album> getAllAlbums() {
         Optional<List<Album>> albums = Optional.of(albumRepository.findAll());
+        if (albums.isEmpty()){
+            System.err.println("No albums found for getAllAlbums");
+        }
         return albums.orElse(List.of()) ;
     }
 
     public Album getAlbumById(Long id) {
-        return null;
+        Optional<Album> album = albumRepository.findById(id);
+        if (album.isEmpty()){
+            System.err.println("No album found for getAlbumById");
+        }
+        return album.orElse(new Album());
     }
 
     public List<Album> getAlbumsByArtist(String artist) {

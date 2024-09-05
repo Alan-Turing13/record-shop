@@ -1,7 +1,6 @@
-package com.northcoders.record_shop;
+package com.northcoders.record_shop.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.northcoders.record_shop.controller.Controller;
 import com.northcoders.record_shop.model.Album;
 import com.northcoders.record_shop.model.Genre;
 import com.northcoders.record_shop.service.AlbumService;
@@ -17,7 +16,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 
@@ -26,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest
-public class TestController {
+public class TestGetAllController {
 
     @Mock
     private AlbumService mockAlbumService;
@@ -36,9 +34,6 @@ public class TestController {
 
     @Autowired
     private MockMvc mockMvcController;
-
-    @Autowired
-    private ObjectMapper mapper;
 
     @BeforeEach
     public void setup(){

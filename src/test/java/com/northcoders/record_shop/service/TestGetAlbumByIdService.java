@@ -1,4 +1,4 @@
-package com.northcoders.record_shop;
+package com.northcoders.record_shop.service;
 
 import com.northcoders.record_shop.model.Album;
 import com.northcoders.record_shop.model.Genre;
@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.mockito.Mockito.when;
 
 @DataJpaTest
-public class TestService {
+public class TestGetAlbumByIdService {
 
     @Mock
     private AlbumRepository mockAlbumRepository;
