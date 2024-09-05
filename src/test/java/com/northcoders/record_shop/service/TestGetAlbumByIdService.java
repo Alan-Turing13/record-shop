@@ -11,7 +11,9 @@ import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
+import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.mockito.Mockito.when;
 
@@ -25,21 +27,22 @@ public class TestGetAlbumByIdService {
     private AlbumService albumService;
 
     @Test
-    @DisplayName("get all albums")
-    void getAllAlbumsTest() throws Exception{
-        List<Album> mockAlbums = List.of(new Album(
-                1L,
-                "Criss-Cross",
-                1963,
+    @DisplayName("get album by id")
+    void getAlbumByIdTest() throws Exception{
+        Long id = 1L;
+        Album mockAlbum = new Album(
+                id,
+                "The Real McCoy",
+                1967,
                 Genre.JAZZ,
-                "Thelonious Monk"
-        ));
+                "McCoy Tyner"
+        );
 
-        when(mockAlbumRepository.findAll()).thenReturn(mockAlbums);
+        when(mockAlbumRepository.findById(id)).thenReturn(Optional.of(mockAlbum));
 
-        List<Album> serviceResult = albumService.getAllAlbums();
+        Album serviceResult = albumService.getAlbumById(id);
 
-        assertIterableEquals(serviceResult, mockAlbums);
+        assertEquals(serviceResult, mockAlbumRepository.findById(id).get());
 
     }
 
