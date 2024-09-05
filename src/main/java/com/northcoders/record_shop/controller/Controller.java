@@ -36,4 +36,14 @@ public class Controller {
         return new ResponseEntity<>(albumService.postAlbum(newAlbum), HttpStatus.CREATED);
     }
 
+    @PutMapping("{id}")
+    public ResponseEntity<Album> updateAlbum(@PathVariable Long id, @RequestBody Album albumDetails){
+        Album lookedUpAlbum = getAlbumById(id).getBody();
+        if (lookedUpAlbum == null) {
+            System.err.println(albumDetails.getName() + " wasn't there to update.");
+            return new ResponseEntity<>(lookedUpAlbum, HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseEntity<>(albumService.updateAlbum(lookedUpAlbum), HttpStatus.OK);
+        }
+    }
 }

@@ -4,7 +4,6 @@ import com.northcoders.record_shop.model.Album;
 import com.northcoders.record_shop.model.Genre;
 import com.northcoders.record_shop.repository.AlbumRepository;
 import com.northcoders.record_shop.service.AlbumService;
-import jakarta.inject.Inject;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

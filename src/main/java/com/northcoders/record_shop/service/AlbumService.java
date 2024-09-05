@@ -1,6 +1,8 @@
 package com.northcoders.record_shop.service;
 
 import com.northcoders.record_shop.model.Album;
+import com.northcoders.record_shop.model.AlbumDetails;
+import com.northcoders.record_shop.model.Genre;
 import com.northcoders.record_shop.repository.AlbumRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -58,8 +60,18 @@ public class AlbumService implements AlbumServiceMethods{
         return null;
     }
 
-    public Album updateAlbum(Album album) {
-        return null;
+    public Album updateAlbum(Album lookedUpAlbum, AlbumDetails updateDetails) {
+
+        lookedUpAlbum.setName(updateDetails.name());
+        lookedUpAlbum.setReleaseYear(updateDetails.releaseYear());
+        lookedUpAlbum.setGenre(Genre.values()[updateDetails.genre()]);
+        lookedUpAlbum.setArtist(updateDetails.artist());
+
+        Optional<Album> updatedAlbum = Optional.of(albumRepository.save(lookedUpAlbum));
+        if (updatedAlbum.isEmpty()){
+            System.err.println("updateAlbum failed for album " + lookedUpAlbum.getName());
+        }
+        return updatedAlbum.orElse(new Album());
     }
 
     public void deleteAlbum(Long id) {

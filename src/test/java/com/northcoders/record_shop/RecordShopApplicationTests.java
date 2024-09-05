@@ -28,4 +28,5 @@ class RecordShopApplicationTests {
 		System.out.println("Album 2 id = " + album2.getId());
 	}
 
+
 }
