@@ -16,6 +16,10 @@ public class AlbumService implements AlbumServiceMethods{
     @Autowired
     AlbumRepository albumRepository;
 
+    /**********************************
+    READ
+     **********************************/
+
     public List<Album> getAllAlbums() {
         Optional<List<Album>> albums = Optional.of(albumRepository.findAll());
         if (albums.isEmpty()){
@@ -48,6 +52,10 @@ public class AlbumService implements AlbumServiceMethods{
         return null;
     }
 
+    /**********************************
+     CREATE
+     **********************************/
+
     public Album postAlbum(Album album) {
         Optional<Album> savedAlbum = Optional.of(albumRepository.save(album));
         if (savedAlbum.isEmpty()){
@@ -60,14 +68,16 @@ public class AlbumService implements AlbumServiceMethods{
         return null;
     }
 
+    /**********************************
+     UPDATE
+     **********************************/
+
     public Album updateAlbum(Album lookedUpAlbum, AlbumDetails updateDetails) {
-        System.out.println("Looked up album: " + lookedUpAlbum.getName());
-        System.out.println("Details to update: " + updateDetails.artist());
+
         lookedUpAlbum.setName(updateDetails.name());
         lookedUpAlbum.setReleaseYear(updateDetails.releaseYear());
         lookedUpAlbum.setGenre(Genre.values()[updateDetails.genre()]);
         lookedUpAlbum.setArtist(updateDetails.artist());
-        System.out.println("Updated album = " + lookedUpAlbum );
         Optional<Album> updatedAlbum = Optional.of(albumRepository.save(lookedUpAlbum));
         if (updatedAlbum.isEmpty()){
             System.err.println("updateAlbum failed for album " + lookedUpAlbum.getName());
@@ -75,7 +85,12 @@ public class AlbumService implements AlbumServiceMethods{
         return updatedAlbum.orElse(new Album());
     }
 
-    public void deleteAlbum(Long id) {
+    /**********************************
+     DELETE
+     **********************************/
 
+    public void deleteAlbum(Long id) {
+        albumRepository.deleteById(id);
     }
+
 }

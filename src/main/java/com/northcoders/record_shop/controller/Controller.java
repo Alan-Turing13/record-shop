@@ -18,6 +18,10 @@ public class Controller {
     @Autowired
     AlbumService albumService;
 
+    /**********************************
+     READ
+     **********************************/
+
     @GetMapping("/albums")
     public ResponseEntity<List<Album>> getAllAlbums(){
         return new ResponseEntity<>(albumService.getAllAlbums(), HttpStatus.OK);
@@ -33,16 +37,23 @@ public class Controller {
         return new ResponseEntity<>(albumService.getAlbumsByArtist(artistName), HttpStatus.OK);
     }
 
+    /**********************************
+     CREATE
+     **********************************/
+
     @PostMapping
     public ResponseEntity<Album> postAlbum(@RequestBody Album newAlbum){
         return new ResponseEntity<>(albumService.postAlbum(newAlbum), HttpStatus.CREATED);
     }
 
+    /**********************************
+     UPDATE
+     **********************************/
+
     @PutMapping("{id}")
     public ResponseEntity<Album> putAlbum(@PathVariable Long id, @RequestBody AlbumDetails albumDetails){
         Album lookedUpAlbum = getAlbumById(id).getBody();
         if (lookedUpAlbum==null) {
-            System.out.println("no album found, creating one instead");
             return postAlbum(new Album(
                     id,
                     albumDetails.name(),
@@ -51,8 +62,18 @@ public class Controller {
                     albumDetails.artist())
             );
         } else {
-            System.out.println("album found, updating it");
             return new ResponseEntity<>(albumService.updateAlbum(lookedUpAlbum, albumDetails), HttpStatus.OK);
         }
     }
+
+    /**********************************
+     DELETE
+     **********************************/
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<String> deleteAlbum(@PathVariable Long id){
+        albumService.deleteAlbum(id);
+        return new ResponseEntity<>("Album deleted successfully", HttpStatus.OK);
+    }
+
 }
