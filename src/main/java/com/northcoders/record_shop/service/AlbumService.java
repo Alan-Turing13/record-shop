@@ -61,12 +61,13 @@ public class AlbumService implements AlbumServiceMethods{
     }
 
     public Album updateAlbum(Album lookedUpAlbum, AlbumDetails updateDetails) {
-
+        System.out.println("Looked up album: " + lookedUpAlbum.getName());
+        System.out.println("Details to update: " + updateDetails.artist());
         lookedUpAlbum.setName(updateDetails.name());
         lookedUpAlbum.setReleaseYear(updateDetails.releaseYear());
         lookedUpAlbum.setGenre(Genre.values()[updateDetails.genre()]);
         lookedUpAlbum.setArtist(updateDetails.artist());
-
+        System.out.println("Updated album = " + lookedUpAlbum );
         Optional<Album> updatedAlbum = Optional.of(albumRepository.save(lookedUpAlbum));
         if (updatedAlbum.isEmpty()){
             System.err.println("updateAlbum failed for album " + lookedUpAlbum.getName());
