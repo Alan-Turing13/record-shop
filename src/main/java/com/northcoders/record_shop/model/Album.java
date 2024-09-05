@@ -21,7 +21,7 @@ public class Album {
     @Column(nullable = false)
     private String name;
 
-    @Column
+    @Column(name = "release-year")
     private int releaseYear;
 
     @Column
@@ -29,4 +29,11 @@ public class Album {
 
     @Column
     private String artist;
+
+    public Album(String name, int releaseYear, Genre genre, String artist) {
+        this.name = name;
+        this.releaseYear = releaseYear;
+        this.genre = genre;
+        this.artist = artist;
+    }
 }
