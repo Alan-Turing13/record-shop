@@ -31,7 +31,11 @@ public class AlbumService implements AlbumServiceMethods{
     }
 
     public List<Album> getAlbumsByArtist(String artist) {
-        return null;
+        Optional<List<Album>> albums = Optional.of(albumRepository.findAllByArtist(artist));
+        if (albums.isEmpty()){
+            System.err.println("No albums found for getAlbumsByArtist");
+        }
+        return albums.orElse(List.of()) ;
     }
 
     public List<Album> getAlbumsByGenre(String genre) {
