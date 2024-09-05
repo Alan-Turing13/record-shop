@@ -18,7 +18,7 @@ public class Album {
     @Column(updatable = false, nullable = false)
     private long id;
 
-    @Column
+    @Column(nullable = false)
     private String name;
 
     @Column

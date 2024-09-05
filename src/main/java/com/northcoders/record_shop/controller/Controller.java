@@ -1,6 +1,8 @@
 package com.northcoders.record_shop.controller;
 
 import com.northcoders.record_shop.model.Album;
+import com.northcoders.record_shop.model.AlbumDetails;
+import com.northcoders.record_shop.model.Genre;
 import com.northcoders.record_shop.service.AlbumService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,13 +39,20 @@ public class Controller {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Album> updateAlbum(@PathVariable Long id, @RequestBody Album albumDetails){
+    public ResponseEntity<Album> putAlbum(@PathVariable Long id, @RequestBody AlbumDetails albumDetails){
         Album lookedUpAlbum = getAlbumById(id).getBody();
-        if (lookedUpAlbum == null) {
-            System.err.println(albumDetails.getName() + " wasn't there to update.");
-            return new ResponseEntity<>(lookedUpAlbum, HttpStatus.BAD_REQUEST);
+        if (lookedUpAlbum==null) {
+            System.out.println("no album found, creating one instead");
+            return postAlbum(new Album(
+                    id,
+                    albumDetails.name(),
+                    albumDetails.releaseYear(),
+                    Genre.values()[albumDetails.genre()],
+                    albumDetails.artist())
+            );
         } else {
-            return new ResponseEntity<>(albumService.updateAlbum(lookedUpAlbum), HttpStatus.OK);
+            System.out.println("album found, updating it");
+            return new ResponseEntity<>(albumService.updateAlbum(lookedUpAlbum, albumDetails), HttpStatus.OK);
         }
     }
 }

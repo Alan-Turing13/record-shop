@@ -26,6 +26,7 @@ class RecordShopApplicationTests {
 
 		System.out.println("Album 1 id = " + album1.getId());
 		System.out.println("Album 2 id = " + album2.getId());
+		System.out.println("No-args constructor album = " + new Album());
 	}
 
 
