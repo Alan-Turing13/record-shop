@@ -40,5 +40,4 @@ public class TestGetAlbumsByGenreService {
         List<Album> serviceResult = albumService.getAlbumsByGenre("NEOCLASSICAL");
         assertIterableEquals(serviceResult, mockAlbums);
     }
-
 }

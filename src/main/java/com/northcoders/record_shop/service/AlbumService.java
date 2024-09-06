@@ -63,7 +63,12 @@ public class AlbumService implements AlbumServiceMethods{
     }
 
     public Album getAlbumByName(String name) {
-        return null;
+        System.out.println("Service received " + name);
+        Optional<Album> album = Optional.of(albumRepository.findByName(name));
+        if (album.isEmpty()){
+            System.err.println(name + " not found");
+        }
+        return albumRepository.findByName(name);
     }
 
     /**********************************

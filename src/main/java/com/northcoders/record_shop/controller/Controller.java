@@ -1,5 +1,6 @@
 package com.northcoders.record_shop.controller;
 
+import com.northcoders.record_shop.dto.AlbumNameDTO;
 import com.northcoders.record_shop.model.Album;
 import com.northcoders.record_shop.model.AlbumDetails;
 import com.northcoders.record_shop.model.Genre;
@@ -54,6 +55,14 @@ public class Controller {
     public ResponseEntity<List<Album>> getAlbumsByGenre(@RequestParam(value = "gnr") String userInputGenre){
         return new ResponseEntity<>(
                 albumService.getAlbumsByGenre(userInputGenre.toUpperCase(Locale.ROOT)), HttpStatus.OK
+        );
+    }
+
+    @PostMapping("/album")
+    public ResponseEntity<Album> getAlbumByName(@RequestBody AlbumNameDTO albumNameDTO){
+        System.out.println("Controller received album name " + albumNameDTO.name());
+        return new ResponseEntity<>(
+                albumService.getAlbumByName(albumNameDTO.name()), HttpStatus.OK
         );
     }
 
