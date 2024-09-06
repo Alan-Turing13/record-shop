@@ -63,5 +63,29 @@ public class TestGetAlbumsByYearController {
                         .value("Piano Concertos Nos. 2 & 3")
                 );
     }
+    @Test
+    @DisplayName("no albums by a certain year")
+    void noAlbumsByYearTest() throws Exception{
+
+        List<Album> mockAlbums = List.of(new Album(
+                1L,
+                "Piano Concertos Nos. 2 & 3",
+                1990,
+                Genre.NEOCLASSICAL,
+                "Sergei Prokofiev"
+        ));
+
+        when(mockAlbumService.getAlbumsByYear(1990)).thenReturn(mockAlbums);
+        this.mockMvcController.perform(
+                MockMvcRequestBuilders.get("http://localhost:8080/api/v1/records/released?year=2024")
+        )
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers
+                        .jsonPath("$[0].name")
+                        .doesNotExist()
+                );
+    }
+
+
 
 }
