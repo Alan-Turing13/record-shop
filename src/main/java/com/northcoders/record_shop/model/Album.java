@@ -27,8 +27,19 @@ public class Album {
     @Column
     private Genre genre;
 
-    @Column
+    @Column(nullable = false)
     private String artist;
+
+    @Column(name = "image-url")
+    private String imageUrl;
+
+    public Album(long id, String name, int releaseYear, Genre genre, String artist) {
+        this.id = id;
+        this.name = name;
+        this.releaseYear = releaseYear;
+        this.genre = genre;
+        this.artist = artist;
+    }
 
     public Album(String name, int releaseYear, Genre genre, String artist) {
         this.name = name;

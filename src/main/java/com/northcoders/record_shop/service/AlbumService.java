@@ -85,6 +85,14 @@ public class AlbumService implements AlbumServiceMethods{
         return updatedAlbum.orElse(new Album());
     }
 
+    public Album updateAlbumArtwork(Album updatedAlbumToSave){
+        Optional<Album> savedUpdatedAlbum = Optional.of(albumRepository.save(updatedAlbumToSave));
+        if (savedUpdatedAlbum.isEmpty()){
+            System.err.println("Couldn't update album artwork for " + updatedAlbumToSave.getName());
+        }
+        return savedUpdatedAlbum.orElse(new Album());
+    }
+
     /**********************************
      DELETE
      **********************************/

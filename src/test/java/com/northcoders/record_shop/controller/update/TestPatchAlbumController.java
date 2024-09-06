@@ -16,11 +16,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
 @SpringBootTest
-public class TestPutAlbumController {
+public class TestPatchAlbumController {
 
     @Mock
     private AlbumService mockAlbumService;
@@ -40,21 +41,16 @@ public class TestPutAlbumController {
     }
 
     @Test
-    @DisplayName("Put album")
+    @DisplayName("Patch album")
     void putAlbumTest() throws Exception{
 
         Long id = 1L;
-        AlbumDetails mockUpdateAlbumDetails = new AlbumDetails(
-                "Journey Through The Secret Life Of Plants",
-                1979,
-                15,
-                "Stevie Wonder"
-                );
+        String mockImageUrl = "some/url";
 
-        this.mockMvcController.perform(MockMvcRequestBuilders.put(
-                "http://localhost:8080/api/v1/records/{id}", id)
-                .content(mapper.writeValueAsString(mockUpdateAlbumDetails))
-                .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isCreated());
+        this.mockMvcController.perform(MockMvcRequestBuilders.patch(
+                                "http://localhost:8080/api/v1/{id}/art", id)
+                        .contentType(mockImageUrl)
+                        .contentType(MediaType.TEXT_PLAIN))
+                .andExpect(status().isNotFound());
     }
 }

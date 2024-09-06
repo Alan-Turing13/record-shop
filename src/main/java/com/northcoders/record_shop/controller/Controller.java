@@ -52,6 +52,7 @@ public class Controller {
 
     @PutMapping("{id}")
     public ResponseEntity<Album> putAlbum(@PathVariable Long id, @RequestBody AlbumDetails albumDetails){
+        System.out.println("received put request");
         Album lookedUpAlbum = getAlbumById(id).getBody();
         if (lookedUpAlbum==null) {
             return postAlbum(new Album(
@@ -63,6 +64,17 @@ public class Controller {
             );
         } else {
             return new ResponseEntity<>(albumService.updateAlbum(lookedUpAlbum, albumDetails), HttpStatus.OK);
+        }
+    }
+
+    @PatchMapping("{id}/art")
+    public ResponseEntity<Album> updateAlbumArtwork(@PathVariable Long id, @RequestBody String imageUrl){
+        Album lookedUpAlbum = getAlbumById(id).getBody();
+        if (lookedUpAlbum==null){
+            return new ResponseEntity<>(new Album(), HttpStatus.NOT_FOUND);
+        } else {
+            lookedUpAlbum.setImageUrl(imageUrl);
+            return new ResponseEntity<>(albumService.updateAlbumArtwork(lookedUpAlbum), HttpStatus.OK);
         }
     }
 

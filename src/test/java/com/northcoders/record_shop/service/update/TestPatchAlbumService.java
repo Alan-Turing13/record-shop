@@ -10,11 +10,12 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @DataJpaTest
-public class TestPutAlbumService {
+public class TestPatchAlbumService {
 
     @Mock
     private AlbumRepository mockAlbumRepository;
@@ -23,9 +24,11 @@ public class TestPutAlbumService {
     private AlbumService albumService;
 
     @Test
-    @DisplayName("Put an album")
-    void putAlbumTest() throws Exception{
+    @DisplayName("Patch an album")
+    void patchAlbumTest() throws Exception{
         Long id = 1L;
+        String mockUrl = "blah";
+
         Album preexistingAlbum = new Album(
                 id,
                 "Criss-Cross",
@@ -34,24 +37,18 @@ public class TestPutAlbumService {
                 "Thelonious Monk"
         );
 
-        AlbumDetails mockUpdateDetails = new AlbumDetails(
-                "Journey Through The Secret Life Of Plants",
-                1979,
-                15,
-                "Stevie Wonder"
-        );
-
         Album mockUpdatedAlbum = new Album(
                 id,
-                mockUpdateDetails.name(),
-                mockUpdateDetails.releaseYear(),
-                Genre.values()[mockUpdateDetails.genre()],
-                mockUpdateDetails.artist()
+                preexistingAlbum.getName(),
+                preexistingAlbum.getReleaseYear(),
+                preexistingAlbum.getGenre(),
+                preexistingAlbum.getArtist(),
+                mockUrl
         );
 
         when(mockAlbumRepository.save(mockUpdatedAlbum)).thenReturn(mockUpdatedAlbum);
         mockAlbumRepository.save(preexistingAlbum);
-        Album serviceResult = albumService.updateAlbum(preexistingAlbum, mockUpdateDetails);
+        Album serviceResult = albumService.updateAlbumArtwork(mockUpdatedAlbum);
         assertEquals(mockUpdatedAlbum, serviceResult);
     }
 }
