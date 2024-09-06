@@ -10,6 +10,7 @@ public interface AlbumServiceMethods {
     List<Album> getAllAlbums();
     Album getAlbumById(Long id);
     List<Album> getAlbumsByArtist(String artist);
+    List<Album> getAlbumsByYear(Integer year);
     List<Album> getAlbumsByGenre(String genre);
     Album getAlbumByName(String name);
 

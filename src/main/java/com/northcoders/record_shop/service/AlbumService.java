@@ -44,6 +44,14 @@ public class AlbumService implements AlbumServiceMethods{
         return albums.orElse(List.of()) ;
     }
 
+    public List<Album> getAlbumsByYear(Integer year) {
+        Optional<List<Album>> albums = Optional.of(albumRepository.findAllByReleaseYear(year));
+        if (albums.isEmpty()){
+            System.err.println("No albums found for " + year);
+        }
+        return albums.orElse(List.of());
+    }
+
     public List<Album> getAlbumsByGenre(String genre) {
         return null;
     }

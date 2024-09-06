@@ -22,13 +22,11 @@ public class Controller {
      READ
      **********************************/
 
-//    returning response entity
     @GetMapping("/albums/response")
     public ResponseEntity<List<Album>> getAllAlbums(){
         return new ResponseEntity<>(albumService.getAllAlbums(), HttpStatus.OK);
     }
 
-//    returning html template
     @GetMapping("/albums")
     public String getAlbums(Model model){
         List<Album> albums = albumService.getAllAlbums();
@@ -44,6 +42,11 @@ public class Controller {
     @GetMapping("/artist")
     public ResponseEntity<List<Album>> getAlbumsByArtist(@RequestParam(value="name") String artistName){
         return new ResponseEntity<>(albumService.getAlbumsByArtist(artistName), HttpStatus.OK);
+    }
+
+    @GetMapping("/released")
+    public ResponseEntity<List<Album>> getAlbumsByYear(@RequestParam(value="year") Integer year){
+        return new ResponseEntity<>(albumService.getAlbumsByYear(year), HttpStatus.OK);
     }
 
     /**********************************
