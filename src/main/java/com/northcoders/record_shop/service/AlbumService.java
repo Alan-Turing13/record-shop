@@ -7,8 +7,7 @@ import com.northcoders.record_shop.repository.AlbumRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class AlbumService implements AlbumServiceMethods{
@@ -53,7 +52,18 @@ public class AlbumService implements AlbumServiceMethods{
     }
 
     public List<Album> getAlbumsByGenre(String genre) {
-        return null;
+        if (Arrays.stream(Genre.values()).filter(g -> String.valueOf(g).equals(genre)).count() < 1){
+            System.err.println("No genre found under " + genre);
+            return List.of();
+        }
+        System.out.println("Genre passed from controller " + genre);
+        List<Album> returnList = new ArrayList<Album>();
+        for (int i = 0; i < Genre.values().length; i++) {
+            if (Genre.values()[i].equals(genre)) {
+                returnList = albumRepository.findAllByGenre(i);
+            }
+        }
+        return returnList;
     }
 
     public Album getAlbumByName(String name) {

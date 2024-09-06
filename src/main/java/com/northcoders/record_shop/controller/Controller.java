@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 import java.util.List;
+import java.util.Locale;
 
 @org.springframework.stereotype.Controller
 @RequestMapping("api/v1/records")
@@ -47,6 +48,14 @@ public class Controller {
     @GetMapping("/released")
     public ResponseEntity<List<Album>> getAlbumsByYear(@RequestParam(value="year") Integer year){
         return new ResponseEntity<>(albumService.getAlbumsByYear(year), HttpStatus.OK);
+    }
+
+    @GetMapping("/genre")
+    public ResponseEntity<List<Album>> getAlbumsByGenre(@RequestParam(value = "gnr") String userInputGenre){
+        System.out.println("Genre input by user " + userInputGenre);
+        return new ResponseEntity<>(
+                albumService.getAlbumsByGenre(userInputGenre.toUpperCase(Locale.ROOT)), HttpStatus.OK
+        );
     }
 
     /**********************************
