@@ -8,10 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.ui.Model;
 import java.util.List;
 
-@RestController
+@org.springframework.stereotype.Controller
 @RequestMapping("api/v1/records")
 public class Controller {
 
@@ -22,9 +22,18 @@ public class Controller {
      READ
      **********************************/
 
-    @GetMapping("/albums")
+//    returning response entity
+    @GetMapping("/albums/response")
     public ResponseEntity<List<Album>> getAllAlbums(){
         return new ResponseEntity<>(albumService.getAllAlbums(), HttpStatus.OK);
+    }
+
+//    returning html template
+    @GetMapping("/albums")
+    public String getAlbums(Model model){
+        List<Album> albums = albumService.getAllAlbums();
+        model.addAttribute("albums", albums);
+        return "/home.html";
     }
 
     @GetMapping()
