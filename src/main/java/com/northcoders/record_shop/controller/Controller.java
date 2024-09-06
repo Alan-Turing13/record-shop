@@ -52,7 +52,6 @@ public class Controller {
 
     @GetMapping("/genre")
     public ResponseEntity<List<Album>> getAlbumsByGenre(@RequestParam(value = "gnr") String userInputGenre){
-        System.out.println("Genre input by user " + userInputGenre);
         return new ResponseEntity<>(
                 albumService.getAlbumsByGenre(userInputGenre.toUpperCase(Locale.ROOT)), HttpStatus.OK
         );

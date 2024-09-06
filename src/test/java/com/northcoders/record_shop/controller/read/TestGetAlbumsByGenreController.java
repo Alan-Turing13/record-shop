@@ -63,4 +63,18 @@ public class TestGetAlbumsByGenreController {
                 );
     }
 
+    @Test
+    @DisplayName("genre not found")
+    void noAlbumsByGenreTest() throws Exception{
+
+        this.mockMvcController.perform(
+                MockMvcRequestBuilders.get("http://localhost:8080/api/v1/records/genre?gnr=hugochavez")
+        )
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers
+                        .jsonPath("$[0].name")
+                        .doesNotExist()
+                );
+    }
+
 }

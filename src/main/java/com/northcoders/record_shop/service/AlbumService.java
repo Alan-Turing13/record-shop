@@ -52,14 +52,10 @@ public class AlbumService implements AlbumServiceMethods{
     }
 
     public List<Album> getAlbumsByGenre(String genre) {
-        if (Arrays.stream(Genre.values()).filter(g -> String.valueOf(g).equals(genre)).count() < 1){
-            System.err.println("No genre found under " + genre);
-            return List.of();
-        }
-        System.out.println("Genre passed from controller " + genre);
         List<Album> returnList = new ArrayList<Album>();
         for (int i = 0; i < Genre.values().length; i++) {
-            if (Genre.values()[i].equals(genre)) {
+            if (String.valueOf(Genre.values()[i]).equals(genre)) {
+                System.out.println("Returning all albums of genre " + i + " from the db");
                 returnList = albumRepository.findAllByGenre(i);
             }
         }
