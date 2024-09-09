@@ -2,7 +2,6 @@ package com.northcoders.record_shop.controller.update;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.northcoders.record_shop.controller.Controller;
-import com.northcoders.record_shop.model.AlbumDetails;
 import com.northcoders.record_shop.service.AlbumService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

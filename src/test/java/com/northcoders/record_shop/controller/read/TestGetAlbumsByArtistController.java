@@ -1,6 +1,8 @@
 package com.northcoders.record_shop.controller.read;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.northcoders.record_shop.controller.Controller;
+import com.northcoders.record_shop.dto.ArtistNameDTO;
 import com.northcoders.record_shop.model.Album;
 import com.northcoders.record_shop.model.Genre;
 import com.northcoders.record_shop.service.AlbumService;
@@ -12,6 +14,7 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -35,6 +38,9 @@ public class TestGetAlbumsByArtistController {
     @Autowired
     private MockMvc mockMvcController;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @BeforeEach
     public void setup(){
         mockMvcController = MockMvcBuilders.standaloneSetup(controller).build();
@@ -43,19 +49,23 @@ public class TestGetAlbumsByArtistController {
     @Test
     @DisplayName("get albums by artist")
     void getAlbumsByArtistTest() throws Exception{
-        String artist = "Sergei Prokofiev";
+        ArtistNameDTO mockArtistNameDTO = new ArtistNameDTO("Sergei Prokofiev");
         String name = "Piano Concertos Nos. 2 & 3";
         List<Album> mockAlbums = List.of(new Album(
                 1L,
                 name,
                 1990,
                 Genre.NEOCLASSICAL,
-                artist
+                mockArtistNameDTO.artistName()
         ));
 
-        when(mockAlbumService.getAlbumsByArtist(artist)).thenReturn(mockAlbums);
+        when(mockAlbumService.getAlbumsByArtist(mockArtistNameDTO.artistName()))
+                .thenReturn(mockAlbums);
+
         this.mockMvcController.perform(
-                MockMvcRequestBuilders.get("http://localhost:8080/api/v1/records/artist?name=".concat(artist))
+                MockMvcRequestBuilders.post("http://localhost:8080/api/v1/records/artist")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(mockArtistNameDTO))
         )
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers

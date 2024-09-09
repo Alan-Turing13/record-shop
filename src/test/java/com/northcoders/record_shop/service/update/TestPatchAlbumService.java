@@ -1,7 +1,6 @@
 package com.northcoders.record_shop.service.update;
 
 import com.northcoders.record_shop.model.Album;
-import com.northcoders.record_shop.model.AlbumDetails;
 import com.northcoders.record_shop.model.Genre;
 import com.northcoders.record_shop.repository.AlbumRepository;
 import com.northcoders.record_shop.service.AlbumService;

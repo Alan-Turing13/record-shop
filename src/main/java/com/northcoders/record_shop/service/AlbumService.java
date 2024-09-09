@@ -1,7 +1,8 @@
 package com.northcoders.record_shop.service;
 
+import com.northcoders.record_shop.exception.NotFoundException;
 import com.northcoders.record_shop.model.Album;
-import com.northcoders.record_shop.model.AlbumDetails;
+import com.northcoders.record_shop.dto.AlbumDetails;
 import com.northcoders.record_shop.model.Genre;
 import com.northcoders.record_shop.repository.AlbumRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,46 +28,57 @@ public class AlbumService implements AlbumServiceMethods{
         return albums.orElse(List.of()) ;
     }
 
-    public Album getAlbumById(Long id) {
+    public Album getAlbumById(Long id) throws NotFoundException {
         Optional<Album> album = albumRepository.findById(id);
         if (album.isEmpty()){
-            System.err.println("No album found for getAlbumById with id " + id);
+            String message = "No album found for getAlbumById with id " + id;
+            System.err.println(message);
+            throw new NotFoundException(message);
         }
-        return album.orElse(new Album());
+        return album.get();
     }
 
-    public List<Album> getAlbumsByArtist(String artist) {
+    public List<Album> getAlbumsByArtist(String artist) throws  NotFoundException{
         Optional<List<Album>> albums = Optional.of(albumRepository.findAllByArtist(artist));
         if (albums.isEmpty()){
-            System.err.println("No albums found for getAlbumsByArtist with artist " + artist);
+            String message = "No albums found for getAlbumsByArtist with artist " + artist;
+            System.err.println(message);
+            throw new NotFoundException(message);
         }
-        return albums.orElse(List.of()) ;
+        return albums.get();
     }
 
-    public List<Album> getAlbumsByYear(Integer year) {
+    public List<Album> getAlbumsByYear(Integer year) throws NotFoundException{
         Optional<List<Album>> albums = Optional.of(albumRepository.findAllByReleaseYear(year));
         if (albums.isEmpty()){
-            System.err.println("No albums found for " + year);
+            String message = "No albums found for " + year;
+            System.err.println(message);
+            throw new NotFoundException(message);
         }
-        return albums.orElse(List.of());
+        return albums.get();
     }
 
-    public List<Album> getAlbumsByGenre(String genre) {
+    public List<Album> getAlbumsByGenre(String genre) throws NotFoundException{
         List<Album> returnList = new ArrayList<Album>();
         for (int i = 0; i < Genre.values().length; i++) {
             if (String.valueOf(Genre.values()[i]).equals(genre)) {
                 System.out.println("Returning all albums of genre " + i + " from the db");
                 returnList = albumRepository.findAllByGenre(i);
+            } else {
+                String message = "No such genre exists";
+                System.err.println(message);
+                throw new NotFoundException(message);
             }
         }
         return returnList;
     }
 
-    public Album getAlbumByName(String name) {
-        System.out.println("Service received " + name);
+    public Album getAlbumByName(String name) throws NotFoundException {
         Optional<Album> album = Optional.of(albumRepository.findByName(name));
         if (album.isEmpty()){
-            System.err.println(name + " not found");
+            String message = name + " not found";
+            System.err.println(message);
+            throw new NotFoundException(message);
         }
         return albumRepository.findByName(name);
     }

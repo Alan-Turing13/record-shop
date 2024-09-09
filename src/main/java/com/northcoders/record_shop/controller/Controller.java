@@ -1,10 +1,15 @@
 package com.northcoders.record_shop.controller;
 
 import com.northcoders.record_shop.dto.AlbumNameDTO;
+import com.northcoders.record_shop.dto.ArtistNameDTO;
 import com.northcoders.record_shop.model.Album;
-import com.northcoders.record_shop.model.AlbumDetails;
+import com.northcoders.record_shop.dto.AlbumDetails;
 import com.northcoders.record_shop.model.Genre;
 import com.northcoders.record_shop.service.AlbumService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import org.hibernate.validator.constraints.URL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,13 +42,17 @@ public class Controller {
     }
 
     @GetMapping()
-    public ResponseEntity<Album> getAlbumById(@RequestParam(value = "album") Long id){
+    public ResponseEntity<Album> getAlbumById(@RequestParam(value = "album") @Min(1) Long id){
         return new ResponseEntity<>(albumService.getAlbumById(id), HttpStatus.OK);
     }
 
-    @GetMapping("/artist")
-    public ResponseEntity<List<Album>> getAlbumsByArtist(@RequestParam(value="name") String artistName){
-        return new ResponseEntity<>(albumService.getAlbumsByArtist(artistName), HttpStatus.OK);
+    @PostMapping("/artist")
+    public ResponseEntity<List<Album>> getAlbumsByArtist(
+            @RequestBody @Valid ArtistNameDTO artistNameDTO
+         ){
+        return new ResponseEntity<>(
+                albumService.getAlbumsByArtist(artistNameDTO.artistName()), HttpStatus.OK
+        );
     }
 
     @GetMapping("/released")
@@ -52,14 +61,19 @@ public class Controller {
     }
 
     @GetMapping("/genre")
-    public ResponseEntity<List<Album>> getAlbumsByGenre(@RequestParam(value = "gnr") String userInputGenre){
+    public ResponseEntity<List<Album>> getAlbumsByGenre(
+            @RequestParam(value = "gnr") @NotBlank String userInputGenre
+    ){
         return new ResponseEntity<>(
-                albumService.getAlbumsByGenre(userInputGenre.toUpperCase(Locale.ROOT)), HttpStatus.OK
+                albumService.getAlbumsByGenre(
+                        userInputGenre.toUpperCase(Locale.ROOT)), HttpStatus.OK
         );
     }
 
     @PostMapping("/album")
-    public ResponseEntity<Album> getAlbumByName(@RequestBody AlbumNameDTO albumNameDTO){
+    public ResponseEntity<Album> getAlbumByName(
+            @RequestBody @Valid AlbumNameDTO albumNameDTO
+    ){
         System.out.println("Controller received album name " + albumNameDTO.name());
         return new ResponseEntity<>(
                 albumService.getAlbumByName(albumNameDTO.name()), HttpStatus.OK
@@ -71,7 +85,7 @@ public class Controller {
      **********************************/
 
     @PostMapping
-    public ResponseEntity<Album> postAlbum(@RequestBody Album newAlbum){
+    public ResponseEntity<Album> postAlbum(@RequestBody @Valid Album newAlbum){
         return new ResponseEntity<>(albumService.postAlbum(newAlbum), HttpStatus.CREATED);
     }
 
@@ -80,7 +94,9 @@ public class Controller {
      **********************************/
 
     @PutMapping("{id}")
-    public ResponseEntity<Album> putAlbum(@PathVariable Long id, @RequestBody AlbumDetails albumDetails){
+    public ResponseEntity<Album> putAlbum(
+            @PathVariable Long id, @RequestBody @Valid AlbumDetails albumDetails
+    ){
         System.out.println("received put request");
         Album lookedUpAlbum = getAlbumById(id).getBody();
         if (lookedUpAlbum==null) {
@@ -92,18 +108,24 @@ public class Controller {
                     albumDetails.artist())
             );
         } else {
-            return new ResponseEntity<>(albumService.updateAlbum(lookedUpAlbum, albumDetails), HttpStatus.OK);
+            return new ResponseEntity<>(
+                    albumService.updateAlbum(lookedUpAlbum, albumDetails), HttpStatus.OK
+            );
         }
     }
 
     @PatchMapping("{id}/art")
-    public ResponseEntity<Album> updateAlbumArtwork(@PathVariable Long id, @RequestBody String imageUrl){
+    public ResponseEntity<Album> updateAlbumArtwork(
+            @PathVariable Long id, @RequestBody @URL String imageUrl
+    ){
         Album lookedUpAlbum = getAlbumById(id).getBody();
         if (lookedUpAlbum==null){
             return new ResponseEntity<>(new Album(), HttpStatus.NOT_FOUND);
         } else {
             lookedUpAlbum.setImageUrl(imageUrl);
-            return new ResponseEntity<>(albumService.updateAlbumArtwork(lookedUpAlbum), HttpStatus.OK);
+            return new ResponseEntity<>(
+                    albumService.updateAlbumArtwork(lookedUpAlbum), HttpStatus.OK
+            );
         }
     }
 
