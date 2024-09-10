@@ -1,6 +1,5 @@
 package com.northcoders.record_shop;
 
-import org.hibernate.annotations.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javax.management.timer.Timer;

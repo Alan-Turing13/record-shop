@@ -32,6 +32,7 @@ public class Controller {
      READ
      **********************************/
 
+    @Cacheable(value = "albums")
     @GetMapping("/albums/response")
     public ResponseEntity<List<Album>> getAllAlbums(){
         return new ResponseEntity<>(albumService.getAllAlbums(), HttpStatus.OK);
@@ -44,7 +45,6 @@ public class Controller {
         return "/home.html";
     }
 
-    @Cacheable("albums")
     @GetMapping()
     public ResponseEntity<Album> getAlbumById(@RequestParam(value = "album") @Min(1) Long id) throws NotFoundException {
         return new ResponseEntity<>(albumService.getAlbumById(id), HttpStatus.OK);
@@ -88,6 +88,7 @@ public class Controller {
      CREATE
      **********************************/
 
+    @CacheEvict(value = "albums", allEntries = true)
     @PostMapping
     public ResponseEntity<Album> postAlbum(@RequestBody @Valid Album newAlbum){
         return new ResponseEntity<>(albumService.postAlbum(newAlbum), HttpStatus.CREATED);
@@ -139,6 +140,7 @@ public class Controller {
      DELETE
      **********************************/
 
+    @CacheEvict(value = "albums", key="#album.id")
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteAlbum(@PathVariable Long id){
         albumService.deleteAlbum(id);
