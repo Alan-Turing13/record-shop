@@ -3,6 +3,7 @@ package com.northcoders.record_shop.controller.update;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.northcoders.record_shop.controller.Controller;
 import com.northcoders.record_shop.dto.AlbumDetails;
+import com.northcoders.record_shop.model.Genre;
 import com.northcoders.record_shop.service.AlbumService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -47,8 +48,9 @@ public class TestPutAlbumController {
         AlbumDetails mockUpdateAlbumDetails = new AlbumDetails(
                 "Journey Through The Secret Life Of Plants",
                 1979,
-                15,
-                "Stevie Wonder"
+                Genre.SOUNDTRACK,
+                "Stevie Wonder",
+                ""
                 );
 
         this.mockMvcController.perform(MockMvcRequestBuilders.put(

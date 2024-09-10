@@ -5,12 +5,10 @@ import com.northcoders.record_shop.dto.ArtistNameDTO;
 import com.northcoders.record_shop.exception.NotFoundException;
 import com.northcoders.record_shop.model.Album;
 import com.northcoders.record_shop.dto.AlbumDetails;
-import com.northcoders.record_shop.model.Genre;
 import com.northcoders.record_shop.service.AlbumService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import org.hibernate.validator.constraints.URL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -90,7 +88,7 @@ public class Controller {
 
     @CacheEvict(value = "albums", allEntries = true)
     @PostMapping
-    public ResponseEntity<Album> postAlbum(@RequestBody @Valid Album newAlbum){
+    public ResponseEntity<Album> postAlbum(@RequestBody AlbumDetails newAlbum) {
         return new ResponseEntity<>(albumService.postAlbum(newAlbum), HttpStatus.CREATED);
     }
 
@@ -102,17 +100,10 @@ public class Controller {
     @PutMapping("{id}")
     public ResponseEntity<Album> putAlbum(
             @PathVariable Long id, @RequestBody @Valid AlbumDetails albumDetails
-    ) throws NotFoundException {
-        System.out.println("received put request");
+    ) throws Exception {
         Album lookedUpAlbum = getAlbumById(id).getBody();
         if (lookedUpAlbum==null) {
-            return postAlbum(new Album(
-                    id,
-                    albumDetails.name(),
-                    albumDetails.releaseYear(),
-                    Genre.values()[albumDetails.genre()],
-                    albumDetails.artist())
-            );
+            return postAlbum(albumDetails);
         } else {
             return new ResponseEntity<>(
                     albumService.updateAlbum(lookedUpAlbum, albumDetails), HttpStatus.OK
@@ -123,8 +114,8 @@ public class Controller {
     @CacheEvict(value = "albums", allEntries = true)
     @PatchMapping("{id}/art")
     public ResponseEntity<Album> updateAlbumArtwork(
-            @PathVariable Long id, @RequestBody @URL String imageUrl
-    ) throws NotFoundException {
+            @PathVariable Long id, @RequestBody @Valid String imageUrl
+    ) throws Exception {
         Album lookedUpAlbum = getAlbumById(id).getBody();
         if (lookedUpAlbum==null){
             return new ResponseEntity<>(new Album(), HttpStatus.NOT_FOUND);

@@ -54,7 +54,7 @@ public class TestGetAllController {
 
         when(mockAlbumService.getAllAlbums()).thenReturn(mockAlbums);
         this.mockMvcController.perform(
-                MockMvcRequestBuilders.get("http://localhost:8080/api/v1/records/albums")
+                MockMvcRequestBuilders.get("http://localhost:8080/api/v1/records/albums/response")
         )
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers

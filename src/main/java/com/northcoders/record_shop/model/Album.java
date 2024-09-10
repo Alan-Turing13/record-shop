@@ -21,22 +21,18 @@ public class Album {
     @Column(updatable = false, nullable = false)
     private long id;
 
-    @NotBlank(message = "Album must have a name")
     @Column(nullable = false)
     private String name;
 
-    @Range(min=1948, max=2025)
     @Column(name = "release-year")
     private int releaseYear;
 
     @Column
     private Genre genre;
 
-    @NotBlank(message = "Artist name is blank")
     @Column(nullable = false)
     private String artist;
 
-    @URL(message = "invalid image url")
     @Column(name = "image-url")
     private String imageUrl;
 
@@ -53,5 +49,13 @@ public class Album {
         this.releaseYear = releaseYear;
         this.genre = genre;
         this.artist = artist;
+    }
+
+    public Album(String name, int releaseYear, Genre genre, String artist, String imageUrl) {
+        this.name = name;
+        this.releaseYear = releaseYear;
+        this.genre = genre;
+        this.artist = artist;
+        this.imageUrl = imageUrl;
     }
 }

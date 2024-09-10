@@ -60,7 +60,8 @@ public class TestGetAlbumByNameController {
                 mockAlbumNameDTO.name(),
                 releaseYear,
                 Genre.NEOCLASSICAL,
-                "Sergei Prokofiev"
+                "Sergei Prokofiev",
+                ""
         );
 
         when(mockAlbumService.getAlbumByName(mockAlbumNameDTO.name())).thenReturn(mockAlbum);

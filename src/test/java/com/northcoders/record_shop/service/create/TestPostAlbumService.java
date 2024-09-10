@@ -1,5 +1,6 @@
 package com.northcoders.record_shop.service.create;
 
+import com.northcoders.record_shop.dto.AlbumDetails;
 import com.northcoders.record_shop.model.Album;
 import com.northcoders.record_shop.model.Genre;
 import com.northcoders.record_shop.repository.AlbumRepository;
@@ -25,15 +26,24 @@ public class TestPostAlbumService{
     @Test
     @DisplayName("Post an album")
     void postAlbumTest() throws Exception{
-        Album mockAlbum = new Album(
-                1L,
+
+        AlbumDetails mockAlbumDetails = new AlbumDetails(
                 "Criss-Cross",
                 1963,
                 Genre.JAZZ,
-                "Thelonious Monk"
+                "Thelonious Monk",
+                ""
         );
+        Album mockAlbum = new Album(
+                "Criss-Cross",
+                1963,
+                Genre.JAZZ,
+                "Thelonious Monk",
+                ""
+        );
+
         when(mockAlbumRepository.save(mockAlbum)).thenReturn(mockAlbum);
-        Album serviceResult = albumService.postAlbum(mockAlbum);
+        Album serviceResult = albumService.postAlbum(mockAlbumDetails);
         assertEquals(mockAlbum, serviceResult);
     }
 }

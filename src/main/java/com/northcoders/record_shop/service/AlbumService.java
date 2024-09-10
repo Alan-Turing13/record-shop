@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class AlbumService implements AlbumServiceMethods{
+public class AlbumService{
 
     private final Logger LOGGER = LoggerFactory.getLogger(AlbumService.class);
 
@@ -92,16 +92,16 @@ public class AlbumService implements AlbumServiceMethods{
      CREATE
      **********************************/
 
-    public Album postAlbum(Album album) {
-        Optional<Album> savedAlbum = Optional.of(albumRepository.save(album));
-        if (savedAlbum.isEmpty()){
-            System.err.println("postAlbum failed for album " + album.getName());
-        }
+    public Album postAlbum(AlbumDetails album) {
+        Optional<Album> savedAlbum = Optional.of(albumRepository.save(
+                Album.builder()
+                    .name(album.name())
+                    .releaseYear(album.releaseYear())
+                    .genre(album.genre())
+                    .artist(album.artist())
+                    .imageUrl(album.imageUrl())
+                    .build()));
         return savedAlbum.orElse(new Album());
-    }
-
-    public List<Album> postMultipleAlbums(List<Album> albums) {
-        return null;
     }
 
     /**********************************
@@ -112,21 +112,15 @@ public class AlbumService implements AlbumServiceMethods{
 
         lookedUpAlbum.setName(updateDetails.name());
         lookedUpAlbum.setReleaseYear(updateDetails.releaseYear());
-        lookedUpAlbum.setGenre(Genre.values()[updateDetails.genre()]);
+        lookedUpAlbum.setGenre(updateDetails.genre());
         lookedUpAlbum.setArtist(updateDetails.artist());
-        Optional<Album> updatedAlbum = Optional.of(albumRepository.save(lookedUpAlbum));
-        if (updatedAlbum.isEmpty()){
-            System.err.println("updateAlbum failed for album " + lookedUpAlbum.getName());
-        }
-        return updatedAlbum.orElse(new Album());
+        lookedUpAlbum.setImageUrl(updateDetails.imageUrl());
+
+        return albumRepository.save(lookedUpAlbum);
     }
 
     public Album updateAlbumArtwork(Album updatedAlbumToSave){
-        Optional<Album> savedUpdatedAlbum = Optional.of(albumRepository.save(updatedAlbumToSave));
-        if (savedUpdatedAlbum.isEmpty()){
-            System.err.println("Couldn't update album artwork for " + updatedAlbumToSave.getName());
-        }
-        return savedUpdatedAlbum.orElse(new Album());
+        return albumRepository.save(updatedAlbumToSave);
     }
 
     /**********************************
