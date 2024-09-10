@@ -5,6 +5,8 @@ import com.northcoders.record_shop.model.Album;
 import com.northcoders.record_shop.dto.AlbumDetails;
 import com.northcoders.record_shop.model.Genre;
 import com.northcoders.record_shop.repository.AlbumRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,8 @@ import java.util.*;
 
 @Service
 public class AlbumService implements AlbumServiceMethods{
+
+    private final Logger LOGGER = LoggerFactory.getLogger(AlbumService.class);
 
     @Autowired
     AlbumRepository albumRepository;
@@ -21,6 +25,7 @@ public class AlbumService implements AlbumServiceMethods{
      **********************************/
 
     public List<Album> getAllAlbums() {
+        LOGGER.info("get all albums call received");
         Optional<List<Album>> albums = Optional.of(albumRepository.findAll());
         if (albums.isEmpty()){
             System.err.println("No albums found for getAllAlbums");
