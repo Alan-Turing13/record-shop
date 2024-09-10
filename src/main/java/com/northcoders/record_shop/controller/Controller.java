@@ -2,6 +2,7 @@ package com.northcoders.record_shop.controller;
 
 import com.northcoders.record_shop.dto.AlbumNameDTO;
 import com.northcoders.record_shop.dto.ArtistNameDTO;
+import com.northcoders.record_shop.exception.NotFoundException;
 import com.northcoders.record_shop.model.Album;
 import com.northcoders.record_shop.dto.AlbumDetails;
 import com.northcoders.record_shop.model.Genre;
@@ -11,6 +12,8 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,29 +44,30 @@ public class Controller {
         return "/home.html";
     }
 
+    @Cacheable("albums")
     @GetMapping()
-    public ResponseEntity<Album> getAlbumById(@RequestParam(value = "album") @Min(1) Long id){
+    public ResponseEntity<Album> getAlbumById(@RequestParam(value = "album") @Min(1) Long id) throws NotFoundException {
         return new ResponseEntity<>(albumService.getAlbumById(id), HttpStatus.OK);
     }
 
     @PostMapping("/artist")
     public ResponseEntity<List<Album>> getAlbumsByArtist(
             @RequestBody @Valid ArtistNameDTO artistNameDTO
-         ){
+         ) throws NotFoundException {
         return new ResponseEntity<>(
                 albumService.getAlbumsByArtist(artistNameDTO.artistName()), HttpStatus.OK
         );
     }
 
     @GetMapping("/released")
-    public ResponseEntity<List<Album>> getAlbumsByYear(@RequestParam(value="year") Integer year){
+    public ResponseEntity<List<Album>> getAlbumsByYear(@RequestParam(value="year") Integer year) throws NotFoundException {
         return new ResponseEntity<>(albumService.getAlbumsByYear(year), HttpStatus.OK);
     }
 
     @GetMapping("/genre")
     public ResponseEntity<List<Album>> getAlbumsByGenre(
             @RequestParam(value = "gnr") @NotBlank String userInputGenre
-    ){
+    ) throws NotFoundException {
         return new ResponseEntity<>(
                 albumService.getAlbumsByGenre(
                         userInputGenre.toUpperCase(Locale.ROOT)), HttpStatus.OK
@@ -73,7 +77,7 @@ public class Controller {
     @PostMapping("/album")
     public ResponseEntity<Album> getAlbumByName(
             @RequestBody @Valid AlbumNameDTO albumNameDTO
-    ){
+    ) throws NotFoundException {
         System.out.println("Controller received album name " + albumNameDTO.name());
         return new ResponseEntity<>(
                 albumService.getAlbumByName(albumNameDTO.name()), HttpStatus.OK
@@ -93,10 +97,11 @@ public class Controller {
      UPDATE
      **********************************/
 
+    @CacheEvict(value = "albums", key="#album.id")
     @PutMapping("{id}")
     public ResponseEntity<Album> putAlbum(
             @PathVariable Long id, @RequestBody @Valid AlbumDetails albumDetails
-    ){
+    ) throws NotFoundException {
         System.out.println("received put request");
         Album lookedUpAlbum = getAlbumById(id).getBody();
         if (lookedUpAlbum==null) {
@@ -114,10 +119,11 @@ public class Controller {
         }
     }
 
+    @CacheEvict(value = "albums", key="#album.id")
     @PatchMapping("{id}/art")
     public ResponseEntity<Album> updateAlbumArtwork(
             @PathVariable Long id, @RequestBody @URL String imageUrl
-    ){
+    ) throws NotFoundException {
         Album lookedUpAlbum = getAlbumById(id).getBody();
         if (lookedUpAlbum==null){
             return new ResponseEntity<>(new Album(), HttpStatus.NOT_FOUND);
