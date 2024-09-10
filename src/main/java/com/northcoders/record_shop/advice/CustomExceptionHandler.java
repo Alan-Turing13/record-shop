@@ -1,24 +1,23 @@
 package com.northcoders.record_shop.advice;
 
+import com.northcoders.record_shop.exception.InvalidInputException;
 import com.northcoders.record_shop.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.thymeleaf.exceptions.TemplateInputException;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @ControllerAdvice
 public class CustomExceptionHandler {
 
-    @ExceptionHandler
-    public ResponseEntity<Object> handleNotFoundException(NotFoundException nfe){
-        return new ResponseEntity<>(nfe.getMessage(), HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<String> handleNotFoundException(NotFoundException nfe){
+        return new ResponseEntity<>(nfe.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(InvalidInputException.class)
+    public ResponseEntity<String> handleInvalidInputException(InvalidInputException iie){
+        return new ResponseEntity<>(iie.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 //    @ResponseStatus(HttpStatus.BAD_REQUEST)

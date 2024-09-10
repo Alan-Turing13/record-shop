@@ -13,7 +13,6 @@ import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -143,7 +142,10 @@ public class Controller {
 
     @CacheEvict(value = "albums", allEntries = true)
     @DeleteMapping("{id}")
-    public ResponseEntity<String> deleteAlbum(@PathVariable Long id){
+    public ResponseEntity<String> deleteAlbum(@PathVariable Long id) throws NotFoundException {
+        if (!getAlbumById(id).hasBody()){
+            throw new NotFoundException("No such album");
+        }
         albumService.deleteAlbum(id);
         return new ResponseEntity<>("Album deleted successfully", HttpStatus.OK);
     }
