@@ -13,6 +13,7 @@ import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -98,7 +99,7 @@ public class Controller {
      UPDATE
      **********************************/
 
-    @CacheEvict(value = "albums", key="#album.id")
+    @CacheEvict(value = "albums", allEntries = true)
     @PutMapping("{id}")
     public ResponseEntity<Album> putAlbum(
             @PathVariable Long id, @RequestBody @Valid AlbumDetails albumDetails
@@ -120,7 +121,7 @@ public class Controller {
         }
     }
 
-    @CacheEvict(value = "albums", key="#album.id")
+    @CacheEvict(value = "albums", allEntries = true)
     @PatchMapping("{id}/art")
     public ResponseEntity<Album> updateAlbumArtwork(
             @PathVariable Long id, @RequestBody @URL String imageUrl
@@ -140,7 +141,7 @@ public class Controller {
      DELETE
      **********************************/
 
-    @CacheEvict(value = "albums", key="#album.id")
+    @CacheEvict(value = "albums", allEntries = true)
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteAlbum(@PathVariable Long id){
         albumService.deleteAlbum(id);
