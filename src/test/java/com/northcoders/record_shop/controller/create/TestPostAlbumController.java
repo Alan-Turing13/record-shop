@@ -2,6 +2,7 @@ package com.northcoders.record_shop.controller.create;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.northcoders.record_shop.controller.Controller;
+import com.northcoders.record_shop.dto.AlbumDetails;
 import com.northcoders.record_shop.model.Album;
 import com.northcoders.record_shop.model.Genre;
 import com.northcoders.record_shop.service.AlbumService;
@@ -52,10 +53,18 @@ public class TestPostAlbumController {
                 "The Real McCoy",
                 1967,
                 Genre.JAZZ,
-                "McCoy Tyner"
+                "McCoy Tyner",
+                ""
         );
+        AlbumDetails mockAlbumDetails = new AlbumDetails(
+                        "The Real McCoy",
+                        1967,
+                        Genre.JAZZ,
+                        "McCoy Tyner",
+                        ""
+                );
 
-        when(mockAlbumService.postAlbum(mockAlbum)).thenReturn(mockAlbum);
+        when(mockAlbumService.postAlbum(mockAlbumDetails)).thenReturn(mockAlbum);
 
         this.mockMvcController.perform(MockMvcRequestBuilders.post(
                 "http://localhost:8080/api/v1/records"
@@ -64,6 +73,6 @@ public class TestPostAlbumController {
                         .content(mapper.writeValueAsString(mockAlbum))
             ).andExpect(status().isCreated());
 
-        verify(mockAlbumService, times(1)).postAlbum(mockAlbum);
+        verify(mockAlbumService, times(1)).postAlbum(mockAlbumDetails);
     }
 }

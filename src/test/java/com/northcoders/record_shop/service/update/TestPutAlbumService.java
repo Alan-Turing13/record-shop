@@ -37,15 +37,16 @@ public class TestPutAlbumService {
         AlbumDetails mockUpdateDetails = new AlbumDetails(
                 "Journey Through The Secret Life Of Plants",
                 1979,
-                15,
-                "Stevie Wonder"
+                Genre.SOUNDTRACK,
+                "Stevie Wonder",
+                ""
         );
 
         Album mockUpdatedAlbum = new Album(
                 id,
                 mockUpdateDetails.name(),
                 mockUpdateDetails.releaseYear(),
-                Genre.values()[mockUpdateDetails.genre()],
+                mockUpdateDetails.genre(),
                 mockUpdateDetails.artist()
         );
 
