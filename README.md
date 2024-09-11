@@ -15,6 +15,8 @@ With this being a full-stack application, I broke it down into the following sta
 - catching all possible exceptions with custom handlers
 - adding login protection to the put, patch, post and delete methods.
 
+![landing page!](src/main/resources/assets/api-endpoints.png)
+
 I didn't overcomplicate the database structure, because I was intent on meeting the goal of the app as stated above.
 By organising the packages and classes so that each separate component only had to focus on its particular responsibilities,
 I created an app that's easy to understand, use and maintain. Through making extensive use of annotations I
