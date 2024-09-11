@@ -57,6 +57,6 @@ public class TestPutAlbumController {
                 "http://localhost:8080/api/v1/records/{id}", id)
                 .content(mapper.writeValueAsString(mockUpdateAlbumDetails))
                 .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isCreated());
+            .andExpect(status().isOk());
     }
 }

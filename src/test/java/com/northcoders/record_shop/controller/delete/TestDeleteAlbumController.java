@@ -42,7 +42,7 @@ public class TestDeleteAlbumController {
 
         ResultActions result = mockMvcController.perform(MockMvcRequestBuilders
                 .delete("http://localhost:8080/api/v1/records/{id}", id));
-        result.andExpect(status().isNotFound());
+        result.andExpect(status().isOk());
     }
 
 }

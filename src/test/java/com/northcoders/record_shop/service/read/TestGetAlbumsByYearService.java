@@ -1,5 +1,6 @@
 package com.northcoders.record_shop.service.read;
 
+import com.northcoders.record_shop.exception.NotFoundException;
 import com.northcoders.record_shop.model.Album;
 import com.northcoders.record_shop.model.Genre;
 import com.northcoders.record_shop.repository.AlbumRepository;
@@ -12,8 +13,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertIterableEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @DataJpaTest
@@ -60,10 +60,7 @@ public class TestGetAlbumsByYearService {
 
         when(mockAlbumRepository.findAllByReleaseYear(1990)).thenReturn(mockAlbums);
 
-        List<Album> serviceResult = albumService.getAlbumsByYear(2024);
-
-        assertTrue(serviceResult.isEmpty());
-
+        assertThrows(NotFoundException.class, () -> albumService.getAlbumsByYear(2024));
     }
 
 }

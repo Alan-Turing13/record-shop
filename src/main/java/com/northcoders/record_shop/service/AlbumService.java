@@ -1,5 +1,6 @@
 package com.northcoders.record_shop.service;
 
+import com.northcoders.record_shop.exception.InvalidInputException;
 import com.northcoders.record_shop.exception.NotFoundException;
 import com.northcoders.record_shop.model.Album;
 import com.northcoders.record_shop.dto.AlbumDetails;
@@ -28,7 +29,7 @@ public class AlbumService{
         LOGGER.info("get all albums call received");
         Optional<List<Album>> albums = Optional.of(albumRepository.findAll());
         if (albums.isEmpty()){
-            System.err.println("No albums found for getAllAlbums");
+            LOGGER.info("No albums found for getAllAlbums");
         }
         return albums.orElse(List.of()) ;
     }
@@ -37,7 +38,7 @@ public class AlbumService{
         Optional<Album> album = albumRepository.findById(id);
         if (album.isEmpty()){
             String message = "No album found for getAlbumById with id " + id;
-            System.err.println(message);
+            LOGGER.info(message);
             throw new NotFoundException(message);
         }
         return album.get();
@@ -47,42 +48,38 @@ public class AlbumService{
         Optional<List<Album>> albums = Optional.of(albumRepository.findAllByArtist(artist));
         if (albums.isEmpty()){
             String message = "No albums found for getAlbumsByArtist with artist " + artist;
-            System.err.println(message);
+            LOGGER.info(message);
             throw new NotFoundException(message);
         }
         return albums.get();
     }
 
     public List<Album> getAlbumsByYear(Integer year) throws NotFoundException{
-        Optional<List<Album>> albums = Optional.of(albumRepository.findAllByReleaseYear(year));
-        if (albums.isEmpty()){
+        List<Album> albumsByYear = albumRepository.findAllByReleaseYear(year);
+        if (albumsByYear.isEmpty()){
             String message = "No albums found for " + year;
-            System.err.println(message);
+            LOGGER.info(message);
             throw new NotFoundException(message);
         }
-        return albums.get();
+        return albumsByYear;
     }
 
     public List<Album> getAlbumsByGenre(String genre) throws NotFoundException{
-        List<Album> returnList = new ArrayList<Album>();
         for (int i = 0; i < Genre.values().length; i++) {
             if (String.valueOf(Genre.values()[i]).equals(genre)) {
-                System.out.println("Returning all albums of genre " + i + " from the db");
-                returnList = albumRepository.findAllByGenre(i);
-            } else {
-                String message = "No such genre exists";
-                System.err.println(message);
-                throw new NotFoundException(message);
+                return albumRepository.findAllByGenre(i);
             }
         }
-        return returnList;
+        String message = "For " + genre + ", no such genre exists";
+        LOGGER.info(message);
+        throw new NotFoundException(message);
     }
 
     public Album getAlbumByName(String name) throws NotFoundException {
         Optional<Album> album = Optional.of(albumRepository.findByName(name));
         if (album.isEmpty()){
             String message = name + " not found";
-            System.err.println(message);
+            LOGGER.info(message);
             throw new NotFoundException(message);
         }
         return albumRepository.findByName(name);
@@ -92,34 +89,50 @@ public class AlbumService{
      CREATE
      **********************************/
 
-    public Album postAlbum(AlbumDetails album) {
-        Optional<Album> savedAlbum = Optional.of(albumRepository.save(
+    public Album postAlbum(AlbumDetails album) throws Exception {
+        try {
+            Album existingAlbum = albumRepository.findByName(album.name());
+            if (!existingAlbum.isEmpty()){
+                throw new InvalidInputException("An album with that name already exists");
+            }
+        } catch (NullPointerException e) {}
+
+        return albumRepository.save(
                 Album.builder()
-                    .name(album.name())
-                    .releaseYear(album.releaseYear())
-                    .genre(album.genre())
-                    .artist(album.artist())
-                    .imageUrl(album.imageUrl())
-                    .build()));
-        return savedAlbum.orElse(new Album());
+                        .name(album.name())
+                        .releaseYear(album.releaseYear())
+                        .genre(album.genre())
+                        .artist(album.artist())
+                        .imageUrl(album.imageUrl())
+                        .build());
     }
 
     /**********************************
      UPDATE
      **********************************/
 
-    public Album updateAlbum(Album lookedUpAlbum, AlbumDetails updateDetails) {
-
-        lookedUpAlbum.setName(updateDetails.name());
-        lookedUpAlbum.setReleaseYear(updateDetails.releaseYear());
-        lookedUpAlbum.setGenre(updateDetails.genre());
-        lookedUpAlbum.setArtist(updateDetails.artist());
-        lookedUpAlbum.setImageUrl(updateDetails.imageUrl());
-
-        return albumRepository.save(lookedUpAlbum);
+    public Album putAlbum(Long id, AlbumDetails albumDetails){
+        if (albumRepository.findById(id).isEmpty()){
+            return albumRepository.save(new Album(
+                    id,
+                    albumDetails.name(),
+                    albumDetails.releaseYear(),
+                    albumDetails.genre(),
+                    albumDetails.artist(),
+                    albumDetails.imageUrl()
+            ));} else {
+            Album existingAlbum = albumRepository.findById(id).get();
+            existingAlbum.setName(albumDetails.name());
+            existingAlbum.setReleaseYear(albumDetails.releaseYear());
+            existingAlbum.setGenre(albumDetails.genre());
+            existingAlbum.setArtist(albumDetails.artist());
+            existingAlbum.setImageUrl(albumDetails.imageUrl());
+            return albumRepository.save(existingAlbum);
+        }
     }
 
     public Album updateAlbumArtwork(Album updatedAlbumToSave){
+        LOGGER.info("Saving " + updatedAlbumToSave.getName());
         return albumRepository.save(updatedAlbumToSave);
     }
 
