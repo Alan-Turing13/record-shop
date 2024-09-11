@@ -31,7 +31,8 @@ public class TestPutAlbumService {
                 "Criss-Cross",
                 1963,
                 Genre.JAZZ,
-                "Thelonious Monk"
+                "Thelonious Monk",
+                ""
         );
 
         AlbumDetails mockUpdateDetails = new AlbumDetails(
@@ -47,12 +48,13 @@ public class TestPutAlbumService {
                 mockUpdateDetails.name(),
                 mockUpdateDetails.releaseYear(),
                 mockUpdateDetails.genre(),
-                mockUpdateDetails.artist()
+                mockUpdateDetails.artist(),
+                mockUpdateDetails.imageUrl()
         );
 
         when(mockAlbumRepository.save(mockUpdatedAlbum)).thenReturn(mockUpdatedAlbum);
         mockAlbumRepository.save(preexistingAlbum);
-        Album serviceResult = albumService.updateAlbum(preexistingAlbum, mockUpdateDetails);
+        Album serviceResult = albumService.putAlbum(id, mockUpdateDetails);
         assertEquals(mockUpdatedAlbum, serviceResult);
     }
 }

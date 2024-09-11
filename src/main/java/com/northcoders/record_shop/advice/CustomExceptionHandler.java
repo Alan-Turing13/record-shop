@@ -9,6 +9,7 @@ import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -35,7 +36,6 @@ public class CustomExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<String> handleInvalidGenre(HttpMessageNotReadableException h){
         return new ResponseEntity<>(INVALID_INPUT_MSG, HttpStatus.BAD_REQUEST);
-
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -47,6 +47,13 @@ public class CustomExceptionHandler {
     public ResponseEntity<String> handleInvalidMethod(HttpRequestMethodNotSupportedException h){
         return new ResponseEntity<>(
                 "That method isn't allowed at that endpoint.", HttpStatus.METHOD_NOT_ALLOWED
+        );
+    }
+
+    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+    public ResponseEntity<String> handleInvalidGenre(HttpMediaTypeNotSupportedException h){
+        return new ResponseEntity<>(
+                "Your form input was invalid, please try a JSON object", HttpStatus.BAD_REQUEST
         );
     }
 

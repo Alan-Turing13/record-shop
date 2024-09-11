@@ -1,7 +1,9 @@
 package com.northcoders.record_shop.controller;
 
+import com.northcoders.record_shop.dto.AlbumImageUrlDTO;
 import com.northcoders.record_shop.dto.AlbumNameDTO;
 import com.northcoders.record_shop.dto.ArtistNameDTO;
+import com.northcoders.record_shop.exception.InvalidInputException;
 import com.northcoders.record_shop.exception.NotFoundException;
 import com.northcoders.record_shop.model.Album;
 import com.northcoders.record_shop.dto.AlbumDetails;
@@ -9,6 +11,10 @@ import com.northcoders.record_shop.service.AlbumService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import org.hibernate.validator.constraints.Range;
+import org.hibernate.validator.constraints.URL;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -22,6 +28,8 @@ import java.util.Locale;
 @org.springframework.stereotype.Controller
 @RequestMapping("api/v1/records")
 public class Controller {
+
+    private final Logger LOGGER = LoggerFactory.getLogger(Controller.class);
 
     @Autowired
     AlbumService albumService;
@@ -58,7 +66,11 @@ public class Controller {
     }
 
     @GetMapping("/released")
-    public ResponseEntity<List<Album>> getAlbumsByYear(@RequestParam(value="year") Integer year) throws NotFoundException {
+    public ResponseEntity<List<Album>> getAlbumsByYear(
+            @RequestParam(value="year")  Integer year) throws Exception {
+        if (year > 2025 || year < 1948 ) {
+            throw new InvalidInputException("Invalid year");
+        }
         return new ResponseEntity<>(albumService.getAlbumsByYear(year), HttpStatus.OK);
     }
 
@@ -88,7 +100,8 @@ public class Controller {
 
     @CacheEvict(value = "albums", allEntries = true)
     @PostMapping
-    public ResponseEntity<Album> postAlbum(@RequestBody AlbumDetails newAlbum) {
+    public ResponseEntity<Album> postAlbum(@RequestBody AlbumDetails newAlbum)
+        throws Exception{
         return new ResponseEntity<>(albumService.postAlbum(newAlbum), HttpStatus.CREATED);
     }
 
@@ -101,30 +114,23 @@ public class Controller {
     public ResponseEntity<Album> putAlbum(
             @PathVariable Long id, @RequestBody @Valid AlbumDetails albumDetails
     ) throws Exception {
-        Album lookedUpAlbum = getAlbumById(id).getBody();
-        if (lookedUpAlbum==null) {
-            return postAlbum(albumDetails);
-        } else {
-            return new ResponseEntity<>(
-                    albumService.updateAlbum(lookedUpAlbum, albumDetails), HttpStatus.OK
+        return new ResponseEntity<>(
+                    albumService.putAlbum(id, albumDetails), HttpStatus.OK
             );
-        }
     }
 
     @CacheEvict(value = "albums", allEntries = true)
     @PatchMapping("{id}/art")
     public ResponseEntity<Album> updateAlbumArtwork(
-            @PathVariable Long id, @RequestBody @Valid String imageUrl
-    ) throws Exception {
-        Album lookedUpAlbum = getAlbumById(id).getBody();
-        if (lookedUpAlbum==null){
-            return new ResponseEntity<>(new Album(), HttpStatus.NOT_FOUND);
-        } else {
-            lookedUpAlbum.setImageUrl(imageUrl);
-            return new ResponseEntity<>(
+            @PathVariable Long id, @RequestBody @Valid AlbumImageUrlDTO albumImageUrlDTO
+            ) throws Exception {
+        Album lookedUpAlbum = albumService.getAlbumById(id);
+        LOGGER.info("Found " + lookedUpAlbum.getName());
+        lookedUpAlbum.setImageUrl(albumImageUrlDTO.imageUrl());
+        LOGGER.info("Having set the image url, calling service method.");
+        return new ResponseEntity<>(
                     albumService.updateAlbumArtwork(lookedUpAlbum), HttpStatus.OK
             );
-        }
     }
 
     /**********************************
@@ -134,9 +140,7 @@ public class Controller {
     @CacheEvict(value = "albums", allEntries = true)
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteAlbum(@PathVariable Long id) throws NotFoundException {
-        if (!getAlbumById(id).hasBody()){
-            throw new NotFoundException("No such album");
-        }
+        getAlbumById(id);
         albumService.deleteAlbum(id);
         return new ResponseEntity<>("Album deleted successfully", HttpStatus.OK);
     }
