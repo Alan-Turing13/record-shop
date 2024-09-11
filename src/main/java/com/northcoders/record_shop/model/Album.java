@@ -59,13 +59,4 @@ public class Album {
         this.imageUrl = imageUrl;
     }
 
-    public boolean isEmpty(){
-        return id == 0 &&
-                name == null &&
-                releaseYear == 0 &&
-                genre == null &&
-                artist == null &&
-                imageUrl == null;
-    }
-
 }

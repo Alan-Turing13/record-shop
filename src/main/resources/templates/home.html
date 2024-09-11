@@ -12,19 +12,18 @@
         <div class="container">
             <th:block th:with="partitions=${T(org.apache.commons.collections4.ListUtils).partition(albums, 3)}">
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" th:each="partition: ${partitions}">
-                        <div class="col" th:each="album: ${partition}">
-                            <div class="card shadow-sm">
-                                    <!--ALBUM COVER-->
-                                <img th:src="${album.imageUrl}" alt="cover">
-                                    <div class="card-body">
-                                    <!--ALBUM NAME-->
-                                        <p class="card-text" th:text="${album.name}"></p>
-                                    </div>
-                            </div>
+                    <div class="col" th:each="album: ${partition}">
+                        <div class="card shadow-sm">
+                                <!--ALBUM COVER-->
+                            <img th:src="${album.imageUrl}" alt="cover">
+                                <div class="card-body">
+                                <!--ALBUM NAME-->
+                                    <p class="card-text" th:text="${album.artist} + ' : ' + ${album.name}"></p>
+                                </div>
                         </div>
                     </div>
-                </th:block>
-            </div>
+                </div>
+            </th:block>
         </div>
     </div>
 </main>

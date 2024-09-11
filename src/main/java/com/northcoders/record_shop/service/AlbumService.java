@@ -90,13 +90,10 @@ public class AlbumService{
      **********************************/
 
     public Album postAlbum(AlbumDetails album) throws Exception {
-        try {
-            Album existingAlbum = albumRepository.findByName(album.name());
-            if (!existingAlbum.isEmpty()){
-                throw new InvalidInputException("An album with that name already exists");
-            }
-        } catch (NullPointerException e) {}
 
+        if (albumRepository.existsByName(album.name())){
+            throw new InvalidInputException("An album with that name already exists");
+        }
         return albumRepository.save(
                 Album.builder()
                         .name(album.name())
