@@ -13,4 +13,5 @@ public interface AlbumRepository extends JpaRepository<Album, Long> {
     List<Album> findAllByReleaseYear(Integer year);
     List<Album> findAllByGenre(Integer genre);
     Album findByName(String name);
+    boolean existsByName(String name);
 }

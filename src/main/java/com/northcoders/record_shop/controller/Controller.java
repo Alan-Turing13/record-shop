@@ -25,7 +25,7 @@ import org.springframework.ui.Model;
 import java.util.List;
 import java.util.Locale;
 
-@org.springframework.stereotype.Controller
+@RestController
 @RequestMapping("api/v1/records")
 public class Controller {
 
@@ -42,13 +42,6 @@ public class Controller {
     @GetMapping("/albums/response")
     public ResponseEntity<List<Album>> getAllAlbums(){
         return new ResponseEntity<>(albumService.getAllAlbums(), HttpStatus.OK);
-    }
-
-    @GetMapping("/albums")
-    public String getAlbums(Model model){
-        List<Album> albums = albumService.getAllAlbums();
-        model.addAttribute("albums", albums);
-        return "/home.html";
     }
 
     @GetMapping()

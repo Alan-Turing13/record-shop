@@ -5,7 +5,6 @@ import com.northcoders.record_shop.exception.InvalidRequestException;
 import com.northcoders.record_shop.exception.NotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -43,6 +42,13 @@ public class CustomExceptionHandler {
         return new ResponseEntity<>(INVALID_INPUT_MSG, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleIllegalArgument(IllegalArgumentException i){
+        return new ResponseEntity<>(
+                "That method isn't allowed at that endpoint.", HttpStatus.METHOD_NOT_ALLOWED
+        );
+    }
+
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<String> handleInvalidMethod(HttpRequestMethodNotSupportedException h){
         return new ResponseEntity<>(
@@ -71,4 +77,6 @@ public class CustomExceptionHandler {
     public ResponseEntity<String>  handleInvalidMethodArgument(InvalidRequestException ire) {
         return new ResponseEntity<>(ire.getMessage(), HttpStatus.BAD_REQUEST);
     }
+
+
 }
