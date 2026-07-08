@@ -21,6 +21,6 @@ public class ViewController {
     public String getAlbums(Model model){
         List<Album> albums = albumService.getAllAlbums();
         model.addAttribute("albums", albums);
-        return "/home.html";
+        return "home.html";
     }
 }

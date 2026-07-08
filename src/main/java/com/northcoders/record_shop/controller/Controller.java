@@ -98,6 +98,13 @@ public class Controller {
         return new ResponseEntity<>(albumService.postAlbum(newAlbum), HttpStatus.CREATED);
     }
 
+    @CacheEvict(value = "albums", allEntries = true)
+    @GetMapping("/populate-table")
+    public ResponseEntity<String> postAlbumsFromLocalFile() throws Exception{
+        albumService.postAlbumsFromLocalFile();
+        return new ResponseEntity<>("IT IS DONE.", HttpStatus.CREATED);
+    }
+
     /**********************************
      UPDATE
      **********************************/
@@ -137,5 +144,4 @@ public class Controller {
         albumService.deleteAlbum(id);
         return new ResponseEntity<>("Album deleted successfully", HttpStatus.OK);
     }
-
 }

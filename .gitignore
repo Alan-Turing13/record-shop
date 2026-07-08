@@ -4,6 +4,10 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+# Mac OS
+.DS_Store
+**/.DS_Store
+
 ### STS ###
 .apt_generated
 .classpath
@@ -18,8 +22,11 @@ target/
 *.iws
 *.iml
 *.ipr
-*.properties
 update.png
+Dockerfile
+
+# AWS Spring profile
+application-aws.properties
 
 ### NetBeans ###
 /nbproject/private/

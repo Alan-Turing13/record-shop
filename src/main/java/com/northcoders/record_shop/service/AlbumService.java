@@ -11,6 +11,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.*;
 
 @Service
@@ -102,6 +105,40 @@ public class AlbumService{
                         .artist(album.artist())
                         .imageUrl(album.imageUrl())
                         .build());
+    }
+
+    public void postAlbumsFromLocalFile() throws Exception{
+        File albumsFile = new File("src/main/resources/albums.txt");
+
+        try (
+            FileReader fReader = new FileReader(albumsFile);
+            BufferedReader bReader = new BufferedReader(fReader)) {
+            Album album;
+            String line, name = null, artist = null, imageUrl;
+            int releaseYear = 0;
+            int i = 0;
+            while ((line = bReader.readLine()) != null){
+                if (i==0){
+                    name = line;
+                    i++;
+                } else if (i==1){
+                    releaseYear = Integer.parseInt(line);
+                    i++;
+                } else if (i==2){
+                    artist = line;
+                    i++;
+                } else if (i==3){
+                    imageUrl = line;
+                    album = new Album(name, releaseYear, null, artist, imageUrl);
+                    if (!albumRepository.existsByName(name)){
+                        LOGGER.info("AlbumService", "Adding album " + album.getName());
+                        albumRepository.save(album);
+                    }
+                    i-=3;
+                }
+            }
+        }
+        LOGGER.info("Post albums from local file complete");
     }
 
     /**********************************

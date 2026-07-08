@@ -27,7 +27,8 @@ public class Album {
     @Column(name = "release-year")
     private int releaseYear;
 
-    @Column
+    @Enumerated(EnumType.ORDINAL)
+    @Column(columnDefinition = "SMALLINT", nullable = true)
     private Genre genre;
 
     @Column(nullable = false)
@@ -44,6 +45,7 @@ public class Album {
         this.artist = artist;
     }
 
+    // no artwork supplied
     public Album(String name, int releaseYear, Genre genre, String artist) {
         this.name = name;
         this.releaseYear = releaseYear;
@@ -59,4 +61,12 @@ public class Album {
         this.imageUrl = imageUrl;
     }
 
+    @Override
+    public String toString() {
+        return "Album{" +
+                "name='" + name + '\'' +
+                ", releaseYear=" + releaseYear +
+                ", artist='" + artist + '\'' +
+                '}';
+    }
 }

@@ -1,8 +1,10 @@
 package com.northcoders.record_shop;
 
+import com.northcoders.record_shop.service.AlbumService;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
@@ -12,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 public class RecordShopApplication {
 
 	public static void main(String[] args) {
+
 		SpringApplication.run(RecordShopApplication.class, args);
 	}
 

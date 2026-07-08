@@ -25,6 +25,5 @@ kept my code free of unnecessary bloat.
 I committed regularly throughout the development process, using different branches when I wanted
 to try out experimental features like caching. Taking this approach ensured that I never spent too long on any one problem.
 
-It's important for me to be able to visualise what I'm working on, so I'm happy I invested some extra time in learning
-about separating collections for the view template, which also gives the user some much-needed context. 
+Update (2026): I’ve added a SeedData class which posts 30 albums to the database in case it’s empty. These are read from a text file in the resources folder. That way when you run the app from scratch you’ll be able to track the view page at http://localhost:8080/api/v1/records/albums 
 
