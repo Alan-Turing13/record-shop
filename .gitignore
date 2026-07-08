@@ -1,6 +1,7 @@
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
+.mvn/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
@@ -24,6 +25,7 @@ target/
 *.ipr
 update.png
 Dockerfile
+Archive.zip
 
 # AWS Spring profile
 application-aws.properties
