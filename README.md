@@ -2,7 +2,7 @@
 
 ![landing page!](src/main/resources/assets/get-all-albums.png)
 
-A Spring Boot CRUD app for persisting your favourite albums, keeping track of them over time and (optionally) making collaborative lists to share with friends
+A Spring Boot RESTful API for persisting albums, keeping track of them over time and (optionally) making collaborative lists to share with friends
 through GitHub login. This includes a 'front window'-style landing page display.
 
 This app has an [Android Frontend](https://github.com/Alan-Turing13/record-shop-android) as well. 

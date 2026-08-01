@@ -2,8 +2,6 @@ package com.northcoders.record_shop.config;
 
 import com.northcoders.record_shop.model.Album;
 import com.northcoders.record_shop.repository.AlbumRepository;
-import com.northcoders.record_shop.service.AlbumService;
-import org.apache.tomcat.util.file.ConfigurationSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.io.ClassPathResource;
